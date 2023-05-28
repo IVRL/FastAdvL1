@@ -1,0 +1,35 @@
+GPU=0
+
+# APGD on different adversarial budget
+for eps in 3 6 9 12 15 18 21 24
+do
+    predir="trained/CIFAR10/EPS=${eps}"
+    for k in 50 100 150 200 250 300
+    do
+
+    savedir="FGSM_RS_k=${k}"
+
+    python run/train_normal.py \
+        --epoch_num 40 \
+        --dataset cifar10 \
+        --model_type preact_resnet_softplus \
+        --optim name=sgd,lr=0.05,momentum=0.9,weight_decay=5e-4,not_wd_bn=True \
+        --lr_schedule name=jump,min_jump_pt=30,jump_freq=5,start_v=0.05,power=0.1 \
+        --valid_ratio 0.04 \
+        --gpu ${GPU} \
+        --batch_size 128 \
+        --out_folder ${predir}/${savedir} \
+        --attack name=pgd,threshold=${eps},iter_num=1,step_size=${eps},k=${k} \
+        --test_attack name=apgd,order=1,threshold=${eps},iter_num=20 \
+        --n_eval 1000
+        
+    python run/eval_autoattack.py \
+        --dataset cifar10 \
+        --model_type preact_resnet_softplus \
+        --model2load ${predir}/${savedir}/None_bestvalid.ckpt \
+        --out_file ${predir}/${savedir}/eval_log.txt \
+        --attack name=apgd,order=1,threshold=${eps} \
+        --gpu ${GPU} 
+
+    done
+done
