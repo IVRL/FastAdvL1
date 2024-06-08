@@ -105,7 +105,7 @@ If you find this repository helpful for your project, please consider citing:
 @inproceedings{
 jiang2023towards,
 title={Towards Stable and Efficient Adversarial Training against $l_1$ Bounded Adversarial Attacks},
-author={Yulun Jiang and Chen Liu and Zhichao Huang and Mathieu Salzmann and Sabine Süsstrunk},
+author={Jiang, Yulun and Liu, Chen and Huang, Zhichao and Salzmann, Mathieu and Susstrunk, Sabine},
 booktitle={International Conference on Machine Learning},
 year={2023},
 organization={PMLR}
